@@ -10,9 +10,9 @@
 
             <div class="mb-md-5 mt-md-4">
 
-              <form class="login-container" action="{{route('login')}}" method="post">
+              <form class="login-container" action="{{route('signin')}}" method="post">
                 @csrf
-                <h2 class="fw-bold mb-2 text-uppercase">ADMIN LOGIN</h2>
+                <h2 class="fw-bold mb-2 text-uppercase">Login</h2>
                 <p class="text-white-50 mb-5">Please enter your login and password!</p>
 
                 <!-- Error mesasge is shown at the login function inside the controller -->
@@ -37,7 +37,7 @@
 
             </div>
             <div>
-              <p class="mb-0"><a href="{{route('user_login')}}" class="text-white-50 fw-bold"> Sign-in as an User </a>
+              <p class="mb-0">Don't have an account? <a href="{{route('user_create')}}" class="text-white-50 fw-bold">Sign Up</a>
               </p>
             </div>
 
@@ -54,10 +54,10 @@
     background: #6a11cb;
 
     /* Chrome 10-25, Safari 5.1-6 */
-    background: -webkit-linear-gradient(to right, rgba(255, 48, 0,1), rgba(238, 0, 98, 1));
+    background: -webkit-linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 1));
 
     /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-    background: linear-gradient(to right,  rgba(255, 48, 0,1), rgba(238, 0, 98, 1))
+    background: linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 1))
   }
   button{
     position:relative;

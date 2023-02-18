@@ -18,8 +18,10 @@ class DashboardController extends Controller
     {
         return view('backend.layouts.admin_login');
     }
+
     public function logout(Request $request)
     {
+        if( Auth::user()-> role_id == 1){
         Auth::logout();
 
         $request->session()->invalidate();
@@ -27,7 +29,19 @@ class DashboardController extends Controller
         $request->session()->regenerateToken();
 
         return redirect('/admin/login');
+        }
+        
+        if( Auth::user()-> role_id == 2){
+        Auth::logout();
+
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
+
+        return redirect('/user/login');
+        }
     }
+
     public function login(Request $request)
     {
         //  dd($request->all());
@@ -40,8 +54,17 @@ class DashboardController extends Controller
 
         if (Auth::attempt($credentials)) {
             // dd($credentials);
-            return redirect()->route('dashboard');
-        } else {
+            $user = User::where('email', $request -> email) -> first();
+
+            if( Auth::user()-> role_id == 1){
+                return redirect()->route('dashboard');
+            }
+
+            else{
+                return redirect() -> route('logout');
+            }
+        } 
+        else {
             // dd($credentials);
             return redirect()->back();
         }
@@ -49,8 +72,8 @@ class DashboardController extends Controller
         // return back()->withErrors([
         //     'email' => 'The provided credentials do not match our records.',
         // ])->onlyInput('email');
-
     }
+
     public function dashboard()
     {
         return view('backend.master');
@@ -60,6 +83,7 @@ class DashboardController extends Controller
     {
         return view('backend.layouts.order_list');
     }
+
     public function user_list()
     {
         $users = User::where('role_id',2) -> get();
@@ -70,7 +94,7 @@ class DashboardController extends Controller
     public function user_edit($id)
     {
         $user = User::find($id);
-        // $user = User::where('id',$id)->first();
+        $user = User::where('id',$id)->first();
         // dd($user);
         return view('backend.layouts.user_edit',compact('user'));
     }
@@ -102,6 +126,8 @@ class DashboardController extends Controller
         ]);
         return redirect() -> route('user_list');
     }
+
+    
     public function user_delete($id)
     {
         $user = User::find($id);
@@ -114,5 +140,10 @@ class DashboardController extends Controller
             }
             $user -> delete();
         return redirect() -> route('user_list');
+    }
+
+    public function messages()
+    {
+        return view('backend.layouts.messages');
     }
 }

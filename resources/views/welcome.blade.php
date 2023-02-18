@@ -59,7 +59,7 @@
                 </div>
             @elseif (Route::has('login') && !Auth::check())
                 <div class="top-right links">
-                    <a href="{{ url('/admin/login') }}">Login</a>
+                    <a href="{{ url('/user/login') }}">Login</a>
                     <a href="{{ url('/user/create') }}">Register</a>
                 </div>
             @endif

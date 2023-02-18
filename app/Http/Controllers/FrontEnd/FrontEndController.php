@@ -48,8 +48,46 @@ class FrontEndController extends Controller
     }
 
     
-//     public function user($id)
-//     {
-//         return $id;
-//     }
+    public function user_login()
+    {
+        return view('frontend.layouts.user_login') ;
+    }
+
+    public function signin(Request $request)
+    {
+        //  dd($request->all());
+        $credentials = $request->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required'],
+        ], [
+            'email.required' => 'The email field must be filled' //This is the error message
+        ]);
+
+        if (Auth::attempt($credentials)) {
+            // dd($credentials);
+            $user = User::where('email', $request -> email) -> first();
+
+            if( $user -> role_id == 2){
+                return redirect()->route('user_dashboard');
+            }
+
+            else{
+                return redirect() -> route('logout');
+            }
+        } 
+        else {
+            // dd($credentials);
+            return redirect()->back();
+        }
+
+        
+        // return back()->withErrors([
+            //     'email' => 'The provided credentials do not match our records.',
+            // ])->onlyInput('email'); 
+        }
+
+        public function user_dashboard()
+        {
+            return view('frontend.master');
+        }
 }

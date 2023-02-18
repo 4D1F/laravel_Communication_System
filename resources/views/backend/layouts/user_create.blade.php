@@ -53,7 +53,7 @@
                                     <button type="submit" class="btn btn-success btn-block btn-lg gradient-custom-4 text-body">Register</button>
                                 </div>
 
-                                <p class="text-center text-muted mt-5">Have an account? <a href="{{route('admin_login')}}" class="fw-bold text-body"><u>Login here</u></a></p>
+                                <p class="text-center text-muted mt-5">Have an account? <a href="{{route('user_login')}}" class="fw-bold text-body"><u>Login here</u></a></p>
 
                             </form>
 

@@ -32,7 +32,7 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">
+        <a class="nav-link" href="{{route('messages')}}">
           <span data-feather="layers" class="align-text-bottom"></span>
           Messages
         </a>
@@ -73,3 +73,5 @@
     </ul>
   </div>
 </nav>
+
+

@@ -24,9 +24,9 @@
       <td>+880<!---->{{$user -> phone}}</td>
       <td>
         @if($user -> image == null)
-        <img src="{{asset('/uploads/profile/dummy.png')}}" height="50" width="50" alt="" title="Dummy Pic" class="rounded">
+        <img class="rounded-pill" src="{{asset('/uploads/profile/dummy.png')}}" height="50" width="50" alt="" title="Dummy Pic">
         @else
-        <img src="{{asset('/uploads/profile/'.$user->image)}}" height="50" width="50" alt="" title="Profile Pic" class="rounded">
+        <img class="rounded-pill" src="{{asset('/uploads/profile/'.$user->image)}}" height="50" width="50" alt="" title="Profile Pic">
         @endif
       </td>
       <td>{{$user -> address}}</td>
@@ -44,8 +44,8 @@
 <style>
 
   img.rounded {
-    object-fit: cover;
-    border-radius: 500%;
+    object-fit: contain;
+    border-radius: 0%;
     height: 50px;
     width: 50px;
       }

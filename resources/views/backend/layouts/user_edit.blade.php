@@ -13,9 +13,9 @@
   </div>
   <div class="mb-3">
     @if($user->image == null)
-        <img src="{{asset('/uploads/profile/dummy.png')}}" height="50" width="50" alt="" title="Dummy Pic">
+        <img class="rounded-pill" src="{{asset('/uploads/profile/dummy.png')}}" height="50" width="50" alt="" title="Dummy Pic" >
         @else
-        <img src="{{asset('/uploads/profile/'.$user->image)}}" height="50" width="50" alt="" title="Profile Pic">
+        <img class="rounded-pill" src="{{asset('/uploads/profile/'.$user->image)}}" height="50" width="50" alt="" title="Profile Pic">
     @endif
     <input type="file" class="form-control" value="{{$user -> image}}" name="image" id="exampleInputEmail1" aria-describedby="emailHelp">
   </div>
