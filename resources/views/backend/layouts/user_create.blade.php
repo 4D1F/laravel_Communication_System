@@ -7,44 +7,46 @@
                 <div class="col-12 col-md-9 col-lg-7 col-xl-6">
                     <div class="card" style="border-radius: 15px;">
                         <div class="card-body p-4">
+                        @include('flash')
+
                             <h2 class="text-uppercase text-center mb-5">Create an account</h2>
 
                             <form action="{{route('registration')}}" method="post" enctype="multipart/form-data">
                                 @csrf
 
-                                <div class="form-outline mb-4">
+                                <div class="form-outline mb-3">
                                     <label class="form-label" for="form3Example4cdg">Name</label>
                                     <input type="text" id="form3Example1cg" class="form-control form-control-lg" placeholder="Name" name="name" />
                                 </div>
 
-                                <div class="form-outline mb-4">
+                                <div class="form-outline mb-3">
                                     <label class="form-label" for="form3Example4cdg">Email</label>
                                     <input type="email" id="form3Example3cg" class="form-control form-control-lg" placeholder="Email" name="email"/>
                                 </div>
 
-                                <div class="form-outline mb-4">
+                                <div class="form-outline mb-3">
                                     <label class="form-label" for="form3Example4cdg">Phone No</label>
                                     <input type="tel" id="form3Example3cg" class="form-control form-control-lg" placeholder="Phone Number" name="phone" />
                                 </div>
 
-                                <div class="form-outline mb-4">
+                                <div class="form-outline mb-3">
                                     <label class="form-label" for="form3Example4cdg">Address</label>
                                     <input type="text" id="form3Example3cg" class="form-control form-control-lg" placeholder="City, P.O., Street no" name="address"/>
                                 </div>
                                 
-                                <div class="form-outline mb-4">
+                                <div class="form-outline mb-3">
                                     <label class="form-label" for="form3Example4cdg">Profile Picture</label>
                                     <input type="file" id="form3Example3cg" class="form-control form-control-lg" name="image"/>
                                 </div>
 
-                                <div class="form-outline mb-4">
+                                <div class="form-outline mb-3">
                                     <label class="form-label" for="form3Example4cdg">Password</label>
                                     <input type="password" id="form3Example4cg" class="form-control form-control-lg" placeholder="********" name="password"/>
                                 </div>
 
                                 <div class="form-check d-flex justify-content-center mb-5">
                                     <label class="form-check-label" for="form2Example3g">
-                                        <input class="form-check-input me-2" type="checkbox" value="" id="form2Example3cg"> </input>
+                                        <input class="form-check-input mt-1" type="checkbox" value="" id="form2Example3cg"> </input>
                                         I agree to all of the <a href="#" class="text-body"><u>Terms of service</u></a>
                                     </label>
                                 </div>
@@ -53,7 +55,7 @@
                                     <button type="submit" class="btn btn-success btn-block btn-lg gradient-custom-4 text-body">Register</button>
                                 </div>
 
-                                <p class="text-center text-muted mt-5">Have an account? <a href="{{route('user_login')}}" class="fw-bold text-body"><u>Login here</u></a></p>
+                                <p class="text-center text-muted mt-3">Have an account? <a href="{{route('user_login')}}" class="fw-bold text-body"><u>Login here</u></a></p>
 
                             </form>
 

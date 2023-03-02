@@ -31,13 +31,15 @@
                 <div class="alert alert-danger"> {{$message}} </div>
                 @enderror
 
+               
+
                 <p class="small mb-5 pb-lg-2"><a class="text-white-50" href="#!">Forgot password?</a></p>
                 <button class="btn btn-outline-light btn-lg px-5" type="submit">Login</button>
               </form>
 
             </div>
             <div>
-              <p class="mb-0">Don't have an account? <a href="{{route('user_create')}}" class="text-white-50 fw-bold">Sign Up</a>
+              <p class="mb-0">Don't have an account? <a href="{{route('user_create')}}" class="fw-bold">Sign Up</a>
               </p>
             </div>
 

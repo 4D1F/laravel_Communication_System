@@ -13,7 +13,7 @@
               <form class="login-container" action="{{route('login')}}" method="post">
                 @csrf
                 <h2 class="fw-bold mb-2 text-uppercase">ADMIN LOGIN</h2>
-                <p class="text-white-50 mb-5">Please enter your login and password!</p>
+                <p class="text-white-50 mb-5">Please enter your Email and Password!</p>
 
                 <!-- Error mesasge is shown at the login function inside the controller -->
 
@@ -30,9 +30,12 @@
                 @error('password')
                 <div class="alert alert-danger"> {{$message}} </div>
                 @enderror
-
+                
                 <p class="small mb-5 pb-lg-2"><a class="text-white-50" href="#!">Forgot password?</a></p>
                 <button class="btn btn-outline-light btn-lg px-5" type="submit">Login</button>
+
+                @include('flash')
+
               </form>
 
             </div>

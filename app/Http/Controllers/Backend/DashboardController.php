@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Termwind\Components\Dd;
+use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
 
 use function PHPUnit\Framework\fileExists;
 
@@ -28,7 +29,7 @@ class DashboardController extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect('/admin/login');
+        return redirect('/');
         }
         
         if( Auth::user()-> role_id == 2){
@@ -38,7 +39,7 @@ class DashboardController extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect('/user/login');
+        return redirect('/');
         }
     }
 
@@ -57,16 +58,17 @@ class DashboardController extends Controller
             $user = User::where('email', $request -> email) -> first();
 
             if( Auth::user()-> role_id == 1){
-                return redirect()->route('dashboard');
+                
+                return redirect()->route('welcome')->with('success','Login Successful');
             }
 
             else{
-                return redirect() -> route('logout');
+                return redirect() -> route('logout')->with('warning','Login Failed');
             }
         } 
         else {
             // dd($credentials);
-            return redirect()->back();
+            return redirect()->back()->with('warning','Login Failed');
         }
 
         // return back()->withErrors([
@@ -133,7 +135,7 @@ class DashboardController extends Controller
         $user = User::find($id);
         $des = public_path('\\uploads\\profile\\'.$user -> image);
         // dd($des);
-        $filename = '';
+        // $filename = '';
         
             if(File::exists($des)){
                 File::delete($des);
