@@ -22,24 +22,24 @@ class DashboardController extends Controller
 
     public function logout(Request $request)
     {
-        if( Auth::user()-> role_id == 1){
-        Auth::logout();
+        if (Auth::user()->role_id == 1) {
+            Auth::logout();
 
-        $request->session()->invalidate();
+            $request->session()->invalidate();
 
-        $request->session()->regenerateToken();
+            $request->session()->regenerateToken();
 
-        return redirect('/');
+            return redirect()->back()->with('warning', 'login failed');
         }
-        
-        if( Auth::user()-> role_id == 2){
-        Auth::logout();
 
-        $request->session()->invalidate();
+        if (Auth::user()->role_id == 2) {
+            Auth::logout();
 
-        $request->session()->regenerateToken();
+            $request->session()->invalidate();
 
-        return redirect('/');
+            $request->session()->regenerateToken();
+
+            return redirect()->back()->with('warning', 'login failed');;
         }
     }
 
@@ -55,20 +55,17 @@ class DashboardController extends Controller
 
         if (Auth::attempt($credentials)) {
             // dd($credentials);
-            $user = User::where('email', $request -> email) -> first();
+            $user = User::where('email', $request->email)->first();
 
-            if( Auth::user()-> role_id == 1){
-                
-                return redirect()->route('welcome')->with('success','Login Successful');
-            }
+            if (Auth::user()->role_id == 1) {
 
-            else{
-                return redirect() -> route('logout')->with('warning','Login Failed');
+                return redirect()->route('welcome')->with('success', 'Login Successful');
+            } else {
+                return redirect()->route('logout')->with('warning', 'Login Failed');
             }
-        } 
-        else {
+        } else {
             // dd($credentials);
-            return redirect()->back()->with('warning','Login Failed');
+            return redirect()->back()->with('error', 'Login Failed');
         }
 
         // return back()->withErrors([
@@ -88,64 +85,70 @@ class DashboardController extends Controller
 
     public function user_list()
     {
-        $users = User::where('role_id',2) -> get();
+        $users = User::where('role_id', 2)->get();
         // dd($user);
-        return view('backend.layouts.user_list',compact('users'));
+        return view('backend.layouts.user_list', compact('users'));
     }
 
     public function user_edit($id)
     {
         $user = User::find($id);
-        $user = User::where('id',$id)->first();
+        $user = User::where('id', $id)->first();
         // dd($user);
-        return view('backend.layouts.user_edit',compact('user'));
+        return view('backend.layouts.user_edit', compact('user'));
     }
 
     public function user_update(Request $req, $id)
     {
         $user = User::find($id);
-        $des = public_path('\\uploads\\profile\\'.$user -> image);
+        $des = public_path('\\uploads\\profile\\' . $user->image);
         // dd($des);
         $filename = '';
-        if($req->hasFile('image')){
-            if(File::exists($des)){
+        if ($req->hasFile('image')) {
+            if (File::exists($des)) {
                 File::delete($des);
             }
             $file = $req->file('image');
-            if($file->isValid()){
-                $filename = date('Ymdhms').rand(1,1000).'.'. $file->getClientOriginalExtension();
-                $file->storeAs('profile',$filename);
+            if ($file->isValid()) {
+                $filename = date('Ymdhms') . rand(1, 1000) . '.' . $file->getClientOriginalExtension();
+                $file->storeAs('profile', $filename);
             }
         }
 
         $user->update([
-            'name' => $req -> name,
-            'email' => $req -> email,
-            'address' => $req -> address,
-            'phone' => $req -> phone,
+            'name' => $req->name,
+            'email' => $req->email,
+            'address' => $req->address,
+            'phone' => $req->phone,
             'image' => $filename
 
         ]);
-        return redirect() -> route('user_list');
+        return redirect()->route('user_list');
     }
 
-    
+
     public function user_delete($id)
     {
         $user = User::find($id);
-        $des = public_path('\\uploads\\profile\\'.$user -> image);
+        $des = public_path('\\uploads\\profile\\' . $user->image);
         // dd($des);
         // $filename = '';
-        
-            if(File::exists($des)){
-                File::delete($des);
-            }
-            $user -> delete();
-        return redirect() -> route('user_list');
+
+        if (File::exists($des)) {
+            File::delete($des);
+        }
+        $user->delete();
+        return redirect()->route('user_list');
     }
 
     public function messages()
     {
         return view('backend.layouts.messages');
     }
+
+    // public function runPythonFunction()
+    // {
+    //     $command = 'python D:/Projects/Sentiment Analysis/message_review.py sentiment_analysis';
+    //     exec($command);
+    // }
 }

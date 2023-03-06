@@ -74,13 +74,13 @@ class FrontEndController extends Controller
             $user = User::where('email', $request->email)->first();
 
             if ($user->role_id == 2) {
-                return redirect()->route('welcome');
+                return redirect()->route('welcome')->with('success','Login Successful');
             } else {
-                return redirect()->route('logout');
+                return redirect() -> route('logout')->with('error','Login Failed');
             }
         } else {
             // dd($credentials);
-            return redirect()->back();
+            return redirect() -> back() ->with('error','Login Failed');
         }
 
 
