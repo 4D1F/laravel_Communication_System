@@ -28,6 +28,9 @@ class FrontEndController extends Controller
                 $file->storeAs('profile', $filename);
             }
         }
+        else{
+            $filename = 'dummy.png';
+        }
         
         try {
 
@@ -40,10 +43,10 @@ class FrontEndController extends Controller
                 'password' => Hash::make($request->password)
 
             ]);
-            return redirect()->route('user_login');
+            return redirect()->route('user_login')->with('success','Registration Successful, Please Login to Continue');
         } catch (Exception $e) {
             // $error = $e -> getMessage();
-            return redirect()->back()->with('error', 'Enail invalid');
+            return redirect()->back()->with('error', 'Email invalid');
         }
     }
 

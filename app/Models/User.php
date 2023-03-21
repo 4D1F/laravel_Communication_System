@@ -37,4 +37,16 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+    public function recent_msg()
+    {
+        return $this -> hasOne(ChMessage::class,'from_id','id') -> latestOfMany();
+    }
+    public function test()
+    {
+        return $this -> hasMany(ChMessage::class,'from_id','id');
+    }
+    public function test2()
+    {
+        return $this -> hasMany(ChMessage::class,'to_id','id');
+    }
 }

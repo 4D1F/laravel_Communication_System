@@ -30,6 +30,9 @@ Route::middleware(['admin_check'])->group(function () {
     Route::put('/user/update/{id}' ,[DashboardController::class,'user_update'])-> name('user_update');
     Route::get('/user/delete/{id}' ,[DashboardController::class,'user_delete'])-> name('user_delete');
     Route::get('/messages' ,[DashboardController::class,'messages'])-> name('messages');
+    Route::get('/messages/list' ,[DashboardController::class,'message_list'])-> name('message_list');
+    Route::get('/get_user/{id}' ,[DashboardController::class,'get_user'])-> name('get_user');
+    Route::get('/get_convo/{from_id}/{to_id}' ,[DashboardController::class,'get_convo'])-> name('get_convo');
 });
 
 

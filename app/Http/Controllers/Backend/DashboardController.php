@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
+use App\Models\ChMessage;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -28,7 +29,7 @@ class DashboardController extends Controller
 
             $request->session()->regenerateToken();
 
-            return redirect()->back()->with('warning', 'login failed');
+            return redirect()->route('admin_login')->with('warning', 'Logged out Successfully');
         }
 
         if (Auth::user()->role_id == 2) {
@@ -38,7 +39,7 @@ class DashboardController extends Controller
 
             $request->session()->regenerateToken();
 
-            return redirect()->back()->with('warning', 'login failed');;
+            return redirect()->route('user_login')->with('warning', 'Logged out Successfully');;
         }
     }
 
@@ -142,12 +143,80 @@ class DashboardController extends Controller
 
     public function messages()
     {
-        return view('backend.layouts.messages');
+        // $users = User::find(1);
+        // dd($users->test);
+
+        $users = User::all();
+        $messages = ChMessage::all();
+        return view('backend.layouts.messages', compact('messages', 'users'));
     }
+
+    public function message_list()
+    {
+        $messages = ChMessage::all();
+
+        return view('backend.layouts.message_list', compact('messages', 'users'));
+    }
+
+    public function get_user($id)
+    {
+        $users = User::all();
+
+        // $megs = ChMessage::where('from_id',$id)->get();
+        // dd($megs);
+
+        // $msgs = ChMessage::join('users','users.id','=','ch_messages.to_id')->get(['users.*','ch_messages.*'])-> where('from_id',$id)->last();
+
+        $megs = [''];
+        foreach ($users as $user) {
+
+            $m = ChMessage::where('from_id', $id)->where('to_id', $user->id)->join('users', 'users.id', '=', 'ch_messages.to_id')->get(['users.*', 'ch_messages.*'])->last();
+            // $m = ChMessage::where('from_id',$id)->where('to_id',$user->id)->get()->last();
+            array_push($megs, $m);
+        }
+        // dd($megs);
+
+        // dd($msgs);        
+
+        return response()->json([
+            'status' => 200,
+            'megs' => $megs
+        ]);
+    }
+
+    public function get_convo($from_id, $to_id)
+    {
+
+        $convos = ChMessage::join('users', 'users.id', '=', 'ch_messages.from_id')
+            ->select('ch_messages.*', 'users.*')
+            ->where(function ($query) use ($from_id, $to_id) {
+                $query->where('ch_messages.from_id', $from_id)
+                    ->where('ch_messages.to_id', $to_id);
+            })
+            ->orWhere(function ($query) use ($from_id, $to_id) {
+                $query->where('ch_messages.from_id', $to_id)
+                    ->where('ch_messages.to_id', $from_id);
+            })
+            ->orderBy('ch_messages.created_at', 'asc')
+            ->get();
+
+        return response()->json([
+            'status' => 200,
+            'convos' => $convos
+        ]);
+    }
+
 
     // public function runPythonFunction()
     // {
     //     $command = 'python D:/Projects/Sentiment Analysis/message_review.py sentiment_analysis';
     //     exec($command);
     // }
+
+    public function search($search)
+    {
+        // $search_term = $_POST['search_term'];
+
+        $results = ChMessage::where('message', 'like', ChMessage::raw("'%$search%'"))->get();
+    }
 }

@@ -160,8 +160,8 @@ class MessagesController extends Controller
                 ]) : null,
             ]);
 
-            $command = 'python D:/Projects/Sentiment_Analysis/message_review.py';
-            shell_exec($command);
+            // $command = 'python D:/Projects/Sentiment_Analysis/message_review.py';
+            // shell_exec($command);
 
             // fetch message to send it with the response
             $messageData = Chatify::fetchMessage($messageID);
