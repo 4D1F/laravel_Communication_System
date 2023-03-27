@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
+use App\Models\ChFavorite;
 use App\Models\ChMessage;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -112,6 +113,7 @@ class DashboardController extends Controller
             if ($file->isValid()) {
                 $filename = date('Ymdhms') . rand(1, 1000) . '.' . $file->getClientOriginalExtension();
                 $file->storeAs('profile', $filename);
+                $file->storeAs('public\storage\users-avatar', $filename);
             }
         }
 
@@ -120,9 +122,11 @@ class DashboardController extends Controller
             'email' => $req->email,
             'address' => $req->address,
             'phone' => $req->phone,
-            'image' => $filename
+            'image' => $filename,
+            'avatar' => $filename
 
         ]);
+        
         return redirect()->route('user_list');
     }
 
@@ -133,11 +137,19 @@ class DashboardController extends Controller
         $des = public_path('\\uploads\\profile\\' . $user->image);
         // dd($des);
         // $filename = '';
-
+        
         if (File::exists($des)) {
-            File::delete($des);
+            if($user->image != 'dummy.png'){
+
+                File::delete($des);
+            }
         }
         $user->delete();
+        $user_msg = ChMessage::where('from_id',$id)->orwhere('to_id',$id)->get()->delete();
+        $user_fav = ChFavorite::where('favorite_id',$id)->orwhere('user_id',$id)->get()->delete();
+        $user_msg->delete();
+        $user_fav->delete();
+        // dd($user_msg, $user_fav);
         return redirect()->route('user_list');
     }
 
@@ -167,10 +179,10 @@ class DashboardController extends Controller
 
         // $msgs = ChMessage::join('users','users.id','=','ch_messages.to_id')->get(['users.*','ch_messages.*'])-> where('from_id',$id)->last();
 
-        $megs = [''];
+        $megs = [];
         foreach ($users as $user) {
 
-            $m = ChMessage::where('from_id', $id)->where('to_id', $user->id)->join('users', 'users.id', '=', 'ch_messages.to_id')->get(['users.*', 'ch_messages.*'])->last();
+            $m = ChMessage::where('from_id', $id)->where('to_id', $user->id)->join('users', 'users.id', '=', 'ch_messages.to_id')->get(['ch_messages.*','users.id','users.name','users.image'])->last();
             // $m = ChMessage::where('from_id',$id)->where('to_id',$user->id)->get()->last();
             array_push($megs, $m);
         }
@@ -188,7 +200,7 @@ class DashboardController extends Controller
     {
 
         $convos = ChMessage::join('users', 'users.id', '=', 'ch_messages.from_id')
-            ->select('ch_messages.*', 'users.*')
+            ->select('ch_messages.*', 'users.id','users.name','users.image')
             ->where(function ($query) use ($from_id, $to_id) {
                 $query->where('ch_messages.from_id', $from_id)
                     ->where('ch_messages.to_id', $to_id);
@@ -200,6 +212,7 @@ class DashboardController extends Controller
             ->orderBy('ch_messages.created_at', 'asc')
             ->get();
 
+        // dd($convos);
         return response()->json([
             'status' => 200,
             'convos' => $convos
@@ -213,10 +226,48 @@ class DashboardController extends Controller
     //     exec($command);
     // }
 
-    public function search($search)
+    public function search($id, $value)
     {
-        // $search_term = $_POST['search_term'];
+        $users = User::where('name', 'like', '%'.$value.'%')->where('id','<>',$id)->get();
+        // $results = ChMessage::join('users', 'users.id', '=', 'ch_messages.to_id')->where('name', 'like', '%'.$value.'%')->get(['users.*', 'ch_messages.*']);
 
-        $results = ChMessage::where('message', 'like', ChMessage::raw("'%$search%'"))->get();
+        $names = [];
+        foreach ($users as $u) {
+            // $m = ChMessage::where('from_id',$id)->where('to_id',$user->id)->get()->last();
+            array_push($names, $u->name);
+        }
+
+        // dd($usernames);
+
+        return response()->json([
+            'status' => 200,
+            'names' => $names
+        ]);
+    }
+
+    public function search_user($from_id, $value)
+    {
+        $user = User::where('name', '=', $value)->first();
+        // $results = ChMessage::join('users', 'users.id', '=', 'ch_messages.to_id')->where('name', '=', $value)->get(['users.*', 'ch_messages.*']);
+        
+        // dd($results);
+
+        $users = User::all();
+
+        // $megs = ChMessage::where('from_id',$id)->get();
+        // dd($megs);
+
+        // $msgs = ChMessage::join('users','users.id','=','ch_messages.to_id')->get(['users.*','ch_messages.*'])-> where('from_id',$id)->last();
+        $m = ChMessage::where('from_id', $from_id)->where('to_id', $user->id)->join('users', 'users.id', '=', 'ch_messages.to_id')->get(['ch_messages.*','users.id','users.name','users.image'])->last();
+        // $m = ChMessage::where('from_id',$id)->where('to_id',$user->id)->get()->last();
+        // array_push($megs, $m);
+
+        // dd($m);
+
+
+        return response()->json([
+            'status' => 200,
+            'm' => $m
+        ]);
     }
 }

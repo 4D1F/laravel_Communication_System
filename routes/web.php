@@ -33,6 +33,8 @@ Route::middleware(['admin_check'])->group(function () {
     Route::get('/messages/list' ,[DashboardController::class,'message_list'])-> name('message_list');
     Route::get('/get_user/{id}' ,[DashboardController::class,'get_user'])-> name('get_user');
     Route::get('/get_convo/{from_id}/{to_id}' ,[DashboardController::class,'get_convo'])-> name('get_convo');
+    Route::get('/search/{id}/{value}' ,[DashboardController::class,'search'])-> name('search');
+    Route::get('/search_user/{id}/{value}' ,[DashboardController::class,'search_user'])-> name('search_user');
 });
 
 
