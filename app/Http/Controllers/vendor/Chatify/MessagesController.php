@@ -15,8 +15,21 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Request as FacadesRequest;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use GuzzleHttp\Client;
+use Illuminate\Console\Command;
+
+class MyCommand extends Command
+{
+    protected $signature = 'my-command';
+
+    public function handle($msg)
+    {
+        $this->info($msg);
+    }
+}
+
+
 class MessagesController extends Controller
 {
     protected $perPage = 30;
@@ -162,7 +175,9 @@ class MessagesController extends Controller
 
             // $command = 'python D:/Projects/Sentiment_Analysis/message_review.py';
             // shell_exec($command);
-
+            $command = 'start http://localhost:500';
+            shell_exec($command);
+        
             // fetch message to send it with the response
             $messageData = Chatify::fetchMessage($messageID);
 
@@ -173,7 +188,8 @@ class MessagesController extends Controller
                 'message' => Chatify::messageCard($messageData, 'default')
             ]);
         }
-
+        echo"I'm here";
+        echo "<script>fetch('http://localhost:500',{method:'GET'}).then(res=>{console.log(res)}).catch(err=>{console.log(err)})</script>";
         // send the response
         return Response::json([
             'status' => '200',

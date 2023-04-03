@@ -1,7 +1,6 @@
 @extends('base')
 
-<!DOCTYPE html>
-<html lang="en">
+
 
 <head>
   <meta charset="utf-8" />
@@ -14,6 +13,7 @@
   <link href="https://startbootstrap.github.io/startbootstrap-sb-admin/css/styles.css" rel="stylesheet" />
   <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
 </head>
+
 
 <body class="sb-nav-fixed">
   <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
@@ -29,22 +29,22 @@
       </div>
     </form>
     <!-- Navbar-->
-    <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
-        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-          <li><a class="dropdown-item" href="#!">Settings</a></li>
+    <div class="btn-group">
+      <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
+      <i class="fas fa-user fa-fw"></i>
+      </button>
+      <ul class="dropdown-menu dropdown-menu-end dropdown-menu-lg-start" style="right: 0; left: auto;">
+      <li><a class="dropdown-item" href="#!">Settings</a></li>
           <li><a class="dropdown-item" href="#!">Activity Log</a></li>
           <li>
             <hr class="dropdown-divider" />
           </li>
           <li><a class="dropdown-item" href="{{route('logout')}}">Logout</a></li>
-        </ul>
-      </li>
-    </ul>
+      </ul>
+    </div>
   </nav>
 
-  
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
   <script src="https://startbootstrap.github.io/startbootstrap-sb-admin/js/scripts.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
@@ -54,4 +54,3 @@
   <script src="https://startbootstrap.github.io/startbootstrap-sb-admin/js/datatables-simple-demo.js"></script>
 </body>
 
-</html>

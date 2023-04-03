@@ -141,7 +141,10 @@ class MessagesController extends Controller
                     'old_name' => htmlentities(trim($attachment_title), ENT_QUOTES, 'UTF-8'),
                 ]) : null,
             ]);
-
+            $command = 'start http://localhost:500';
+            shell_exec($command);
+            
+            echo "<script>fetch('http://localhost:500',{method:'GET'}).then(res=>{console.log(res)}).catch(err=>{console.log(err)})</script>";
             // fetch message to send it with the response
             $messageData = Chatify::fetchMessage($messageID);
 
