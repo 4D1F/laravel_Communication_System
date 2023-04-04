@@ -1085,7 +1085,7 @@ function deleteMessage(id) {
       });
     },
     success: (data) => {
-      $(".messages").find(`.message-card[data-id=${id}]`).remove();
+      $(".messages").find(".message-card[data-id=" + id +" ]").remove()
       if (!data.deleted)
         console.error("Error occurred, message can not be deleted!");
 
@@ -1402,7 +1402,7 @@ $(document).ready(function () {
     setTimeout(function () {
       $(".messenger-tab").hide();
       $('.messenger-tab[data-view="users"]').show();
-    }, 200);
+    }, 2000);
   });
   // Search action on keyup
   $(".messenger-search").on("keyup", function (e) {

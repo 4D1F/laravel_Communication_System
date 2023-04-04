@@ -102,18 +102,23 @@ class DashboardController extends Controller
     public function user_update(Request $req, $id)
     {
         $user = User::find($id);
-        $des = public_path('\\uploads\\profile\\' . $user->image);
+        $des = public_path('uploads\\profile\\' . $user->image);
+        $des2 = public_path('storage\\users-avatar\\' . $user->image);
         // dd($des);
-        $filename = '';
+        $filename = $user-> image;
         if ($req->hasFile('image')) {
             if (File::exists($des)) {
-                File::delete($des);
+                if($user->image != 'dummy.png' || $user->avatar != 'avatar.png'){
+
+                    File::delete($des);
+                    File::delete($des2);
+                }
             }
             $file = $req->file('image');
             if ($file->isValid()) {
                 $filename = date('Ymdhms') . rand(1, 1000) . '.' . $file->getClientOriginalExtension();
-                $file->storeAs('profile', $filename);
-                $file->storeAs('public\storage\users-avatar', $filename);
+                $file->storeAs('uploads/profile', $filename);
+                $file->storeAs('storage/users-avatar', $filename);
             }
         }
 
@@ -134,14 +139,17 @@ class DashboardController extends Controller
     public function user_delete($id)
     {
         $user = User::find($id);
-        $des = public_path('\\uploads\\profile\\' . $user->image);
+        $des = public_path('uploads\\profile\\' . $user->image);
+        $des2 = public_path('storage\\users-avatar\\' . $user->image);
+
         // dd($des);
         // $filename = '';
         
         if (File::exists($des)) {
-            if($user->image != 'dummy.png'){
+            if($user->image != 'dummy.png' || $user->avatar != 'avatar.png'){
 
                 File::delete($des);
+                File::delete($des2);
             }
         }
         $user->delete();

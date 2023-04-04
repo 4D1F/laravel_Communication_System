@@ -13,7 +13,7 @@
   </div>
   <div class="mb-3">
     @if($user->image == null)
-    <img class="rounded" src="{{asset('/uploads/profile/dummy.png')}}" height="200" width="200" alt="" title="Dummy Pic">
+    <img class="rounded" src="{{asset('/uploads/profile/dummy.png')}}" height="200" width="200" alt="" title="Dummy Pic" value>
     @else
     <img class="rounded" src="{{asset('/uploads/profile/'.$user->image)}}" height="200" width="200" alt="" title="Profile Pic">
     @endif

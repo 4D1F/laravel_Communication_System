@@ -25,7 +25,8 @@ class FrontEndController extends Controller
             $file = $request->file('image');
             if ($file->isValid()) {
                 $filename = date('Ymdhms') . rand(1, 1000) . '.' . $file->getClientOriginalExtension();
-                $file->storeAs('profile', $filename);
+                $file->storeAs('uploads/profile', $filename);
+                $file->storeAs('storage/users-avatar', $filename);
             }
         }
         else{
@@ -40,6 +41,7 @@ class FrontEndController extends Controller
                 'address' => $request->address,
                 'phone' => $request->phone,
                 'image' => $filename,
+                'avatar' => $filename,
                 'password' => Hash::make($request->password)
 
             ]);

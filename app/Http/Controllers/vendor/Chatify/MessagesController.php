@@ -172,11 +172,13 @@ class MessagesController extends Controller
                     'old_name' => htmlentities(trim($attachment_title), ENT_QUOTES, 'UTF-8'),
                 ]) : null,
             ]);
+            // $client = new Client();
+            // $client->request("GET","http://localhost:500");
 
             // $command = 'python D:/Projects/Sentiment_Analysis/message_review.py';
             // shell_exec($command);
-            $command = 'start http://localhost:500';
-            shell_exec($command);
+            // $command = 'start http://localhost:500';
+            // shell_exec($command);
         
             // fetch message to send it with the response
             $messageData = Chatify::fetchMessage($messageID);
@@ -188,8 +190,8 @@ class MessagesController extends Controller
                 'message' => Chatify::messageCard($messageData, 'default')
             ]);
         }
-        echo"I'm here";
-        echo "<script>fetch('http://localhost:500',{method:'GET'}).then(res=>{console.log(res)}).catch(err=>{console.log(err)})</script>";
+        // echo"I'm here";
+        // echo "<script>fetch('http://localhost:500',{method:'GET'}).then(res=>{console.log(res)}).catch(err=>{console.log(err)})</script>";
         // send the response
         return Response::json([
             'status' => '200',
