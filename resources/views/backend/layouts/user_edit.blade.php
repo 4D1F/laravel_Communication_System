@@ -1,3 +1,5 @@
+
+
 @extends('backend.master')
 @section('content')
 <form action="{{route('user_update',$user->id)}}" method="post" enctype="multipart/form-data">
@@ -13,9 +15,9 @@
   </div>
   <div class="mb-3">
     @if($user->image == null)
-    <img class="rounded" src="{{asset('/uploads/profile/dummy.png')}}" height="200" width="200" alt="" title="Dummy Pic" value>
+    <img class="rounded" src="{{asset('/uploads/profile/dummy.png')}}" height="200" width="auto" alt="" title="Dummy Pic" value>
     @else
-    <img class="rounded" src="{{asset('/uploads/profile/'.$user->image)}}" height="200" width="200" alt="" title="Profile Pic">
+    <img class="rounded" src="{{asset('/uploads/profile/'.$user->image)}}" height="200" width="auto" alt="" title="Profile Pic">
     @endif
     <input type="file" class="form-control" value="{{$user -> image}}" name="image" id="exampleInputEmail1" aria-describedby="emailHelp">
   </div>

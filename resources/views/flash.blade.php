@@ -1,4 +1,3 @@
-@extends('base')
 
 @if ($message = Session::get('success'))
 <div class="alert alert-success alert-block alert-dismissable fade show" id="alert">
@@ -50,7 +49,7 @@
 
 <style>
     .alert {
-        position: absolute;
+        position: inherit;
         top: 0;
         z-index: 2;
     }

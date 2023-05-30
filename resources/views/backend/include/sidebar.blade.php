@@ -1,4 +1,5 @@
 
+
 <nav id="sidebarMenu" class="col-md-1 col-lg-2 d-md-block bg-light sidebar collapse">
   <div class="position-relative sidebar-relative">
     <ul class="nav flex-column">
@@ -18,7 +19,7 @@
       
       <li class="nav-item">
         <a class="nav-link" href="{{ url('/chatify') }}">
-          <span data-feather="layers" class="align-text-bottom"></span>
+          <span data-feather="send" class="align-text-bottom"></span>
           Messages
         </a>
       </li>
@@ -26,11 +27,19 @@
       
       <li class="nav-item">
         <a class="nav-link" href="{{route('messages')}}">
-          <span data-feather="layers" class="align-text-bottom"></span>
+          <span data-feather="message-circle" class="align-text-bottom"></span>
           All Users' Messages
         </a>
       </li>
-    </ul>
+    
+    <li class="nav-item">
+      <a class="nav-link" href="{{route('message_list')}}">
+        <span data-feather="layers" class="align-text-bottom"></span>
+        Generate Report
+      </a>
+    </li>
+  </ul> 
+
 
     <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted text-uppercase">
       <span>Coming Soon...</span>
@@ -45,21 +54,11 @@
           Coming Soon...
         </a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">
-          <span data-feather="file-text" class="align-text-bottom"></span>
-          Coming Soon...
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">
-          <span data-feather="file-text" class="align-text-bottom"></span>
-          Coming Soon...
-        </a>
-      </li>
+      
       
     </ul>
   </div>
 </nav>  
+
 
 

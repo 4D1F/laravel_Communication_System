@@ -111,6 +111,7 @@ class MessagesController extends Controller
     {
         $filePath = config('chatify.attachments.folder') . '/' . $fileName;
         if (Chatify::storage()->exists($filePath)) {
+            
             return Chatify::storage()->download($filePath);
         }
         return abort(404, "Sorry, File does not exist in our server or may have been deleted!");
@@ -148,6 +149,7 @@ class MessagesController extends Controller
                     // upload attachment and store the new name
                     $attachment = Str::uuid() . "." . $file->extension();
                     $file->storeAs(config('chatify.attachments.folder'), $attachment, config('chatify.storage_disk_name'));
+                    $file->storeAs('storage/attachments', $attachment);
                 } else {
                     $error->status = 1;
                     $error->message = "File extension not allowed!";

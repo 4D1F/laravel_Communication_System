@@ -20,10 +20,10 @@ class CreateMessagesTable extends Migration
             $table->bigInteger('to_id');
             $table->string('body',5000)->nullable();
             $table->string('sentiment')->nullable();
+            $table->string('highlight')->nullable();
             $table->string('attachment')->nullable();
             $table->boolean('seen')->default(false);
             $table->timestamps();
-
             $table->primary('id');
         });
     }

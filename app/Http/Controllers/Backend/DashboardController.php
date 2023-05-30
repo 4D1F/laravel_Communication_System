@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\File;
 use Termwind\Components\Dd;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
 use function PHPUnit\Framework\fileExists;
+use Barryvdh\DomPDF\Facade\Pdf as PDF;
 
 class DashboardController extends Controller
 {
@@ -76,7 +77,9 @@ class DashboardController extends Controller
 
     public function dashboard()
     {
-        return view('backend.master');
+        $messages = ChMessage::where('sentiment', 'negative')->orderBy('ch_messages.created_at', 'desc')->paginate(10);
+        
+        return view('backend.layouts.dashboard', compact('messages'));
     }
 
     public function order()
@@ -97,6 +100,19 @@ class DashboardController extends Controller
         $user = User::where('id', $id)->first();
         // dd($user);
         return view('backend.layouts.user_edit', compact('user'));
+    }
+
+    // public function message_report()
+    // {
+    //     $pdf = PDF::loadView('backend.layouts.message_list');
+    //     return $pdf->stream('message_list');
+    //     // return view('backend.layouts.message_list');
+    // }
+
+    public function admin_profile()
+    {
+        $user = User::find(Auth::user()->id);
+        return view('backend.layouts.admin_profile', compact('user'));
     }
 
     public function user_update(Request $req, $id)
@@ -132,7 +148,7 @@ class DashboardController extends Controller
 
         ]);
         
-        return redirect()->route('user_list');
+        return redirect()->back()->with('success', 'Updated Successfully');
     }
 
 
@@ -173,10 +189,20 @@ class DashboardController extends Controller
 
     public function message_list()
     {
-        $messages = ChMessage::all();
+        $messages = ChMessage::orderBy('ch_messages.created_at', 'asc')->paginate(10);
+        $users = User::all();
 
         return view('backend.layouts.message_list', compact('messages', 'users'));
     }
+
+    public function message_search(Request $req)
+    {
+        $messages = ChMessage::where('from_id', $req->from_id)->where('to_id', $req->to_id)->orWhere('from_id', $req->to_id)->where('to_id', $req->from_id)->orderBy('ch_messages.created_at', 'asc')->paginate(10);
+        $users = User::all();
+
+        return view('backend.layouts.message_list', compact('messages', 'users'));
+    }
+
 
     public function get_user($id)
     {
@@ -188,11 +214,29 @@ class DashboardController extends Controller
         // $msgs = ChMessage::join('users','users.id','=','ch_messages.to_id')->get(['users.*','ch_messages.*'])-> where('from_id',$id)->last();
 
         $megs = [];
+        $last = [];
         foreach ($users as $user) {
 
-            $m = ChMessage::where('from_id', $id)->where('to_id', $user->id)->join('users', 'users.id', '=', 'ch_messages.to_id')->get(['ch_messages.*','users.id','users.name','users.image'])->last();
+            $m = ChMessage::where('from_id', $id)->where('to_id', $user->id)->latest()->join('users', 'users.id', '=', 'ch_messages.to_id')->get(['ch_messages.*','users.id','users.name','users.image'])->first(); #latest() is not working
+            // dd($m);
             // $m = ChMessage::where('from_id',$id)->where('to_id',$user->id)->get()->last();
             array_push($megs, $m);
+
+            $last_msg = ChMessage::join('users', 'users.id', '=', 'ch_messages.from_id')
+            ->select('ch_messages.*', 'users.id','users.name','users.image')
+            ->where(function ($query) use ($id, $user) {
+                $query->where('ch_messages.from_id', $id)
+                    ->where('ch_messages.to_id', $user->id);
+            })
+            ->orWhere(function ($query) use ($id, $user) {
+                $query->where('ch_messages.from_id', $user->id)
+                    ->where('ch_messages.to_id', $id);
+            })
+            ->orderBy('ch_messages.created_at', 'asc')
+            ->get()
+            ->last();
+            array_push($last, $last_msg);
+
         }
         // dd($megs);
 
@@ -200,7 +244,8 @@ class DashboardController extends Controller
 
         return response()->json([
             'status' => 200,
-            'megs' => $megs
+            'megs' => $megs,
+            'last' => $last,
         ]);
     }
 
@@ -245,6 +290,7 @@ class DashboardController extends Controller
             array_push($names, $u->name);
         }
 
+
         // dd($usernames);
 
         return response()->json([
@@ -271,11 +317,25 @@ class DashboardController extends Controller
         // array_push($megs, $m);
 
         // dd($m);
+        $last_msg = ChMessage::join('users', 'users.id', '=', 'ch_messages.from_id')
+            ->select('ch_messages.*', 'users.id','users.name','users.image')
+            ->where(function ($query) use ($from_id, $user) {
+                $query->where('ch_messages.from_id', $from_id)
+                    ->where('ch_messages.to_id', $user->id);
+            })
+            ->orWhere(function ($query) use ($from_id, $user) {
+                $query->where('ch_messages.from_id', $user->id)
+                    ->where('ch_messages.to_id', $from_id);
+            })
+            ->orderBy('ch_messages.created_at', 'asc')
+            ->get()
+            ->last();
 
 
         return response()->json([
             'status' => 200,
-            'm' => $m
+            'm' => $m,
+            'last_msg'=> $last_msg
         ]);
     }
 }

@@ -44,12 +44,12 @@
                                     <input type="password" id="form3Example4cg" class="form-control form-control-lg" placeholder="********" name="password"/>
                                 </div>
 
-                                <div class="form-check d-flex justify-content-center mb-5">
+                                <!-- <div class="form-check d-flex justify-content-center mb-5">
                                     <label class="form-check-label" for="form2Example3g">
                                         <input class="form-check-input mt-1" type="checkbox" value="" id="form2Example3cg"> </input>
                                         I agree to all of the <a href="#" class="text-body"><u>Terms of service</u></a>
                                     </label>
-                                </div>
+                                </div> -->
 
                                 <div class="d-flex justify-content-center">
                                     <button type="submit" class="btn btn-success btn-block btn-lg gradient-custom-4 text-body">Register</button>

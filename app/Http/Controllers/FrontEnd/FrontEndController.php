@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\FrontEnd;
 
 use App\Http\Controllers\Controller;
+use App\Models\ChMessage;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Exception;
+use Illuminate\Support\Facades\File;
 
 class FrontEndController extends Controller
 {
@@ -64,6 +66,48 @@ class FrontEndController extends Controller
         return view('frontend.layouts.user_login');
     }
 
+    public function user_profile()
+    {
+        $user = User::find(Auth::user()->id);
+        return view('frontend.layouts.user_profile', compact('user'));
+    }
+
+    public function user_profile_update(Request $req, $id)
+    {
+        $user = User::find($id);
+        $des = public_path('uploads\\profile\\' . $user->image);
+        $des2 = public_path('storage\\users-avatar\\' . $user->image);
+        // dd($des);
+        $filename = $user-> image;
+        if ($req->hasFile('image')) {
+            if (File::exists($des)) {
+                if($user->image != 'dummy.png' || $user->avatar != 'avatar.png'){
+
+                    File::delete($des);
+                    File::delete($des2);
+                }
+            }
+            $file = $req->file('image');
+            if ($file->isValid()) {
+                $filename = date('Ymdhms') . rand(1, 1000) . '.' . $file->getClientOriginalExtension();
+                $file->storeAs('uploads/profile', $filename);
+                $file->storeAs('storage/users-avatar', $filename);
+            }
+        }
+
+        $user->update([
+            'name' => $req->name,
+            'email' => $req->email,
+            'address' => $req->address,
+            'phone' => $req->phone,
+            'image' => $filename,
+            'avatar' => $filename
+
+        ]);
+        
+        return redirect()->route('user_profile')->with('success', 'Updated Successfully');
+    }
+
     public function signin(Request $request)
     {
         //  dd($request->all());
@@ -96,6 +140,7 @@ class FrontEndController extends Controller
 
     public function user_dashboard()
     {
-        return view('frontend.master');
+        $messages = ChMessage::where('from_id', Auth::user()->id)->orWhere('to_id', Auth::user()->id)->orderBy('ch_messages.created_at', 'desc')->take(50)->paginate(10);
+        return view('frontend.layouts.dashboard',compact('messages'));
     }
 }

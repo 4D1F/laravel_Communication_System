@@ -9,7 +9,7 @@
   <meta name="generator" content="Hugo 0.108.0">
   <title>Dashboard Template · Bootstrap v5.3</title>
 
-  <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/dashboard/">
+  <link rel="canonical" href="https://getbootstrap.com/docs/5.2.3/examples/dashboard/">
 
 
 

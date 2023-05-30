@@ -291,24 +291,26 @@
                 type: "GET",
                 success: function(data) {
                     $.each(data.megs, function(index, value) {
-                        if (value != null) {
-                            var date = new Date(value.created_at);
-                            var options = { timeZone: 'Asia/Dhaka', hour12: false };
-                            var formattedDate = date.toLocaleString('en-US', options);
+                        
+                            if (value != null) {
+                                var date = new Date(value.created_at);
+                                var options = { timeZone: 'Asia/Dhaka', hour12: true };
+                                var formattedDate = date.toLocaleString('en-US', options);
 
-                                $('#chat_list').append('\
-                        <div class="chat_list active_chat conversation" data-to_id="' + value.to_id + '">\
-                        <div class="chat_people">\
-                            <div class="chat_img"> <img class="rounded-pill" src="/uploads/profile/' + value.image + '" height="40" width="40" alt="' + value.name + '"> </div>\
-                            <div class="chat_ib">\
-                            <h5 class="usernames"> ' + value.name + ' <span class="chat_date">' + formattedDate + '</span></h5>\
-                            <p>' + value.body + '</p>\
-                            </div>\
-                            </div>\
-                            </div>\
-                    ');
-                        }
-                    });
+                                    $('#chat_list').append('\
+                            <div class="chat_list active_chat conversation" data-to_id="' + value.to_id + '">\
+                            <div class="chat_people">\
+                                <div class="chat_img"> <img class="rounded-pill" src="/uploads/profile/' + value.image + '" height="40" width="40" alt="' + value.name + '"> </div>\
+                                <div class="chat_ib">\
+                                <h5 class="usernames"> ' + value.name + ' <span class="chat_date">' + formattedDate + '</span></h5>\
+                                <p>' + data.last[index].body + '</p>\
+                                </div>\
+                                </div>\
+                                </div>\
+                        ');
+                            }
+                      });
+                         
                 }
             });
         });
@@ -336,15 +338,16 @@
                                 if(value.attachment != null){
                                     let name = JSON.parse(value.attachment);
                                     let filename = name.new_name;
+                                    let old_name = name.old_name;
                                     let ext = name.old_name;
                                     ext = ext.split(".").pop();
                                     console.log(filename, ext);
                                     if(ext == "rar" ||ext == "zip" ||ext == "txt" ||ext == "pdf"){
                                     $('#convo').append('\
-                                    <div class="outgoing_msg">\
-                                    <a class="" href="/storage/attachments/' + filename +'" alt="" title=" '+filename+' ">\
+                                    <div class="outgoing_msg" >\
+                                    <a class="" href="/storage/attachments/' + filename +'" alt="" title=" '+old_name+' ">\
                                     <div class="sent_msg" id="sent_msg">\
-                                    <p>'+filename+'</p>\
+                                    <p style="background: #010491 none repeat scroll 0 0 !important;">'+old_name+'</p>\
                                     <span class="time_date"> ' + formattedDate + ' </span>\
                                     </div>\
                                     </a>\
@@ -353,8 +356,10 @@
                                     }else{
                                         $('#convo').append('\
                                     <div class="outgoing_msg">\
-                                    <div class="sent_msg" id="sent_msg">\
-                                    <img class="" src="/storage/attachments/' + filename +'" alt="" title="Dummy Pic">\
+                                    <div class="sent_msg" id="sent_msg" >\
+                                    <a class="" href="/storage/attachments/' + filename +'" alt="" title="' + old_name + '" target="_blank" rel="noopener noreferrer">\
+                                    <img class="" src="/storage/attachments/' + filename +'" alt="" title="' + old_name + '">\
+                                    </a>\
                                     <span class="time_date"> ' + formattedDate + ' </span>\
                                     </div>\
                                     </div>\
@@ -367,6 +372,7 @@
                                     <div class="sent_msg" id="sent_msg">\
                                     <p>' + value.body + '</p>\
                                     <span class="time_date"> ' + formattedDate + ' </span>\
+                                    <span class="time_date"> Sentiment: ' + value.sentiment + ' Highlighted Words: ' + value.highlight + ' </span>\
                                     </div>\
                                     </div>\
                                     ');
@@ -375,6 +381,7 @@
                                 if(value.attachment != null){
                                     let name = JSON.parse(value.attachment);
                                     let filename = name.new_name;
+                                    let old_name = name.old_name;
                                     let ext = name.old_name;
                                     ext = ext.split(".").pop();
                                     console.log(filename, ext);
@@ -384,7 +391,8 @@
                                         <div class="incoming_msg_img"> <img class="rounded-pill" src="/uploads/profile/' + value.image + '" height="30" width="30" alt="' + value.name + '"> </div>\
                                         <div class="received_msg">\
                                         <div class="received_withd_msg">\
-                                        <a class="" src="/storage/attachments/' + filename +'" alt="" title="Dummy Pic">'+filename+'</a>\
+                                        <a class="" href="/storage/attachments/' + filename +'" alt="" title="'+ old_name +'">\
+                                        <p style="background: #8af3ff none repeat scroll 0 0 !important;">'+old_name+'</p></a>\
                                         <span class="time_date"> ' + formattedDate + ' </span>\
                                         </div>\
                                         </div>\
@@ -398,7 +406,9 @@
                                         <div class="incoming_msg_img"> <img class="rounded-pill" src="/uploads/profile/' + value.image + '" height="30" width="30" alt="' + value.name + '"> </div>\
                                         <div class="received_msg">\
                                         <div class="received_withd_msg">\
-                                        <img class="" src="/storage/attachments/' + filename +'" alt="" title="Dummy Pic">\
+                                        <a class="" href="/storage/attachments/' + filename +'" alt="" title="' + old_name + '" target="_blank" rel="noopener noreferrer">\
+                                        <img class="" src="/storage/attachments/' + filename +'" alt="" title="' + old_name + '">\
+                                        </a>\
                                         <span class="time_date"> ' + formattedDate + ' </span>\
                                         </div>\
                                         </div>\
@@ -416,6 +426,7 @@
                                     <div class="received_withd_msg">\
                                     <p>' + value.body + '</p>\
                                     <span class="time_date"> ' + formattedDate + '</span>\
+                                    <span class="time_date"> Sentiment: ' + value.sentiment + ' Highlighted Words: ' + value.highlight + ' </span>\
                                     </div>\
                                     </div>\
                                     </div>\
@@ -463,7 +474,7 @@
                                 success: function(data) {
                                         if (data.m != null) {
                                             var date = new Date(data.m.created_at);
-                                            var options = { timeZone: 'Asia/Dhaka', hour12: false };
+                                            var options = { timeZone: 'Asia/Dhaka', hour12: true };
                                             var formattedDate = date.toLocaleString('en-US', options);
                                            
                                                 $('#chat_list').append('\
@@ -472,7 +483,7 @@
                                                     <div class="chat_img"> <img class="rounded-pill" src="/uploads/profile/' + data.m.image + '" height="50" width="50" alt="' + data.m.name + '"> </div>\
                                                     <div class="chat_ib">\
                                                     <h5> ' + data.m.name + ' <span class="chat_date">' + formattedDate + '</span></h5>\
-                                                    <p>' + data.m.body + '</p>\
+                                                    <p>' + data.last_msg.body + '</p>\
                                                     </div>\
                                                 </div>\
                                                 </div>\

@@ -5,7 +5,12 @@
         {{-- Header and search bar --}}
         <div class="m-header">
             <nav>
+                @if(auth()->user()->role_id == 1)
                 <a href="{{ url('/dashboard') }}"><i class="fas fa-arrow-circle-left"></i> <span class="messenger-headTitle">DASHBOARD</span> </a>
+                @else
+                <a href="{{ url('/user/dashboard') }}"><i class="fas fa-arrow-circle-left"></i> <span class="messenger-headTitle">DASHBOARD</span> </a>
+                @endif
+                
                 {{-- header buttons --}}
                 <nav class="m-header-right">
                     <a href="#"><i class="fas fa-cog settings-btn"></i></a>
